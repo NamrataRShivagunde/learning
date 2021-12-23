@@ -391,9 +391,9 @@ def get_arguments():
 def main():
     # Loading dataset
     raw_datasets = load_dataset("ag_news")
-    train_data = raw_datasets['train'].shuffle(seed=35).select(range(20))
+    train_data = raw_datasets['train']#.shuffle(seed=35).select(range(20))
     val_data = train_data.train_test_split(test_size=0.08) # creating validation set
-    test_data = raw_datasets['test'].shuffle(seed=35).select(range(5))
+    test_data = raw_datasets['test']#.shuffle(seed=35).select(range(5))
 
     # Taking a small sample
     raw_datasets['train'] = val_data['train']
