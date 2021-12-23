@@ -234,12 +234,12 @@ def batch_evaluate(batch, model, flag):
     
     correct = (predictions.squeeze(1) == y_true).sum()
         
-    if flag is 'train':    
+    if flag == 'train':    
         wandb.log({"training loss": loss, "batch training accuracy ": correct/len(y_true)})
         return loss
-    elif flag is 'val':
+    elif flag == 'val':
         wandb.log({"validation loss": loss, "validation accuracy ": correct/len(y_true)})
-    elif flag is 'test':
+    elif flag == 'test':
         wandb.log({"test accuracy ": correct/len(y_true)})
     else:
       print("enter the correct flag value. It must be one of these 'train', 'val, 'test'")
