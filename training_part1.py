@@ -257,8 +257,8 @@ def train(tokenized_datasets, tokenizer, data_collator):
     args = get_arguments()
 
     config = {"train_batch_size": args.batch_size, 
-              "val_batch_size": len(tokenized_datasets['val']),  # whole val set
-              "test_batch_size": len(tokenized_datasets['test']), # whole test set
+              "val_batch_size": int(len(tokenized_datasets['val'])/2),  # whole val set
+              "test_batch_size": int(len(tokenized_datasets['test'])/2), # whole test set
               "input_size": args.hidden_size, 
               "hidden_size": args.hidden_size, 
               "num_labels": NUM_LABELS, 
@@ -289,8 +289,9 @@ def train(tokenized_datasets, tokenizer, data_collator):
         num_epochs = config["epochs"]
         num_labels = NUM_LABELS # change it into constant
         num_training_steps = num_epochs * len(train_dataloader)
-        optimizer = AdamW(model.parameters(), betas=(0.9, 0.99), eps=1e-7, lr=config["lr"])
-        lr_scheduler = StepLR(optimizer, step_size=num_training_steps)
+        # optimizer = AdamW(model.parameters(), betas=(0.9, 0.99), eps=1e-7, lr=config["lr"])
+        optimizer = AdamW(model.parameters(), lr=config["lr"])
+        # lr_scheduler = StepLR(optimizer, step_size=num_training_steps)
         progress_bar = tqdm(range(num_training_steps))
 
         # Training loop
@@ -303,7 +304,7 @@ def train(tokenized_datasets, tokenizer, data_collator):
                 loss = batch_evaluate(batch, model, flag='train')
                 loss.backward()
                 optimizer.step()
-                lr_scheduler.step()
+                # lr_scheduler.step()
                 optimizer.zero_grad() # otherwise gradients get added up
                 progress_bar.update(1)
 
